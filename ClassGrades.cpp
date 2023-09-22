@@ -59,11 +59,6 @@ public:
 
 			cout << students.at(i) << " " << grades.at(i) << endl;
 		}
-
-		/*for (int i = 0; i < students.size(); i++)
-		{
-
-		}*/
 	}
 
 };
