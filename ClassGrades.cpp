@@ -14,90 +14,95 @@ using namespace std;
 class Student
 {
 private:
-	string fName;
-	string lName;
-	string grade;
+    string fName;
+    string lName;
+    int grade;
 
 public:
-	Student(string fName, string lName, string grade)
-	{
-		this->fName = fName;
-		this->lName = lName;
-		this->grade = grade;
-	}
+    Student(string fName, string lName, int grade)
+    {
+        this->fName = fName;
+        this->lName = lName;
+        this->grade = grade;
+    }
 
-	void SortByGrade()
-	{
-		vector<string> students;
-		vector<string> grades;
+    string FName()
+    {
+        return fName;
+    }
 
-		int i, j, smallestIndex;
-		string temp;
-		string temp_student;
+    string LName()
+    {
+        return lName;
+    }
 
-		students.push_back(fName + " " + lName);
-		grades.push_back(grade);
-
-		for (int i = 0; i < students.size(); i++)
-		{			
-			smallestIndex = i;
-			for (j = i + 1; j < students.size() - 1; ++j)
-			{
-				if (grades.at(j) < grades.at(smallestIndex))
-				{
-					smallestIndex = j;
-				}
-			}
-
-			temp = grades.at(i);
-			grades.at(i) = grades.at(smallestIndex);
-			grades.at(smallestIndex) = temp;
-
-			temp_student = students.at(i);
-			students.at(i) = students.at(smallestIndex);
-			students.at(smallestIndex) = temp_student;
-
-			cout << students.at(i) << " " << grades.at(i) << endl;
-		}
-	}
-
+    int Grade()
+    {
+        return grade;
+    }
 };
+
+void SortByGrade(vector<Student>& students)
+{
+
+    int i, j;
+
+    for (int i = 0; i < students.size(); i++)
+    {
+        for (j = i + 1; j < students.size(); ++j)
+        {
+            if (students[i].Grade() < students[j].Grade())
+            {
+                Student temp = students[i];
+                students[i] = students[j];
+                students[j] = temp;
+            }
+        }
+    }
+}
 
 int main()
 {
-	string fName;
-	string lName;
-	string grade;
+    string fName;
+    string lName;
+    string grade;
 
-	ifstream myfile;
+    ifstream myfile;
 
-	myfile.open("example.txt");
+    myfile.open("example.txt");
 
-	if (myfile.fail())
-	{
-		cout << "File failed to open.";
-		return 1;
-	}
+    if (myfile.fail())
+    {
+        cout << "File failed to open.";
+        return 1;
+    }
 
-	string currentLine;
+    string currentLine;
 
-	while (!myfile.eof())
-	{
-		while (getline(myfile, currentLine))
-		{
-			stringstream ss(currentLine);
-			getline(ss, fName, ' ');
-			getline(ss, lName, ' ');
-			getline(ss, grade, ' ');
+    vector<Student> students;
 
-			Student Student(fName, lName, grade);
+    while (!myfile.eof())
+    {
+        while (getline(myfile, currentLine))
+        {
+            stringstream ss(currentLine);
+            getline(ss, fName, ' ');
+            getline(ss, lName, ' ');
+            getline(ss, grade, ' ');
 
-			Student.SortByGrade();
-		}
+            Student s = Student(fName, lName, stoi(grade)); // stoi converts from string to int
 
-	}
+            students.push_back(s);
+        }
+    }
 
+    SortByGrade(students);
 
+    for (int i = 0; i < students.size(); i++)
+    {
+        cout << students[i].FName() << " " << students[i].LName() << " " << students[i].Grade() << endl;
+    }
 
-	return(0);
+    return(0);
 }
+
